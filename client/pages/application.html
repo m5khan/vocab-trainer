@@ -1,0 +1,215 @@
+﻿<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Vocab Trainer</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ng-class="{active: vm.menuFlag == vm.menu.list}" ng-click="vm.listClick()"><a href="#">List</a></li>
+                <li ng-class="{active: vm.menuFlag == vm.menu.words}" ng-click="vm.wordClick()"><a href="#">Words</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container" ng-controller="listController" ng-if="vm.menuFlag == vm.menu.list">
+    <div class="row">
+        <div class="col-md-6">
+            <input type="text" class="form-control" id="listname" placeholder="Enter List Name" ng-model="vm.listInput">
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-default" type="submit" ng-click="vm.addListItem(vm.listInput)">Add List</button>
+        </div>
+    </div>
+    <hr/>
+    <h3>LIST</h3>
+
+    <div class="alert alert-danger alert-dismissible fade in" role="alert" ng-if="vm.remove.alert">
+        <h4 id="delete-list">Delete list<a class="anchorjs-link" href="#"><span class="anchorjs-icon"></span></a></h4>
+        <p>Are you sure you want to delete this list</p>
+        <p>
+            <button type="button" class="btn btn-danger" ng-click="vm.removeConfirm()">Remove</button>
+            <button type="button" class="btn btn-default" ng-click="vm.removeCancel()">Cancel</button>
+        </p>
+    </div>
+
+    <div class="row">
+        <div ng-repeat="item in vm.list">
+            <div ng-if="$index % 3 == 0" class="clearfix"></div>
+            <div class="col-md-4">   
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        {{item.name}} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ng-click="vm.selectListItem($index)"><a href="#">Select</a></li>
+                        <li class="divider"></li>
+                        <li ng-click="vm.removeListWarning($index)"><a href="#">Delete</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- carry botton -->
+    <div class="row">
+        <div class="col-md-5 col-lg-offset-4">
+            <div class="btn-group vocab-word-btn-grp carry-btn-grp">
+                <button type="button" class="btn btn-info" ng-click="vm.selectCarryList()">Carried Words</button>
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-click="vm.clearCarry()"><a href="#">Clear carry</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Word Controller -->
+<div class="container" ng-controller="wordController" ng-if="vm.menuFlag == vm.menu.words">
+    <div class="row">
+        <div class="col-md-4" ng-if="vm.isCarry == false">
+            <div class="btn-group" role="group" aria-label="word options">
+                <button type="button" class="btn btn-primary" ng-if="vm.flag != vm.wordflags.list && vm.flag != vm.wordflags.flashcard" ng-click="vm.showList()">Word List</button>
+                <button type="button" class="btn btn-primary" ng-if="vm.isList && vm.flag != vm.wordflags.add && vm.flag != vm.wordflags.flashcard" ng-click="vm.newWord()">Add New</button>
+                <button type="button" class="btn btn-primary" ng-if="vm.flag != vm.wordflags.list && vm.flag != vm.wordflags.add && vm.flag != vm.wordflags.edit && vm.flag != vm.wordflags.flashcard" ng-click="vm.editSelectedWord()">Edit</button>
+                <button type="button" class="btn btn-primary" ng-if="vm.flag == vm.wordflags.flashcard" ng-click="vm.flipFlashCard()">Flip Card</button>
+                <button type="button" class="btn btn-primary" ng-if="vm.flag == vm.wordflags.flashcard" ng-click="vm.nextFlashCard()">Next Card</button>
+                <button type="button" class="btn btn-success" ng-if="vm.flag != vm.wordflags.flashcard" ng-click="vm.startFlashCard()">Start FlashCard</button>
+                <button type="button" class="btn btn-danger" ng-if="vm.flag == vm.wordflags.flashcard" ng-click="vm.stopFlashCard()">Stop FlashCard</button>
+            </div>
+        </div>
+        <!-- button section for carry view only-->
+        <div class="col-md-4" ng-if="vm.isCarry == true">
+            <div class="btn-group" role="group" aria-label="word options">
+                <button type="button" class="btn btn-primary" ng-if="vm.flag != vm.wordflags.list && vm.flag != vm.wordflags.flashcard" ng-click="vm.showList()">Word List</button>
+                <button type="button" class="btn btn-primary" ng-if="vm.flag == vm.wordflags.flashcard" ng-click="vm.flipFlashCard()">Flip Card</button>
+                <button type="button" class="btn btn-primary" ng-if="vm.flag == vm.wordflags.flashcard" ng-click="vm.nextFlashCard()">Next Card</button>
+                <button type="button" class="btn btn-success" ng-if="vm.flag != vm.wordflags.flashcard" ng-click="vm.startFlashCard()">Start FlashCard</button>
+                <button type="button" class="btn btn-danger" ng-if="vm.flag == vm.wordflags.flashcard" ng-click="vm.stopFlashCard()">Stop FlashCard</button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Search" ng-model="vm.searchText" ng-model-options="{ debounce: 500 }" />
+        </div>
+    </div>
+    <hr />
+    <!-- word list -->
+    <div class="row">
+        <h3 ng-if="vm.flag == vm.wordflags.list" ng-bind="vm.listName"></h3>
+        <h3 ng-if="vm.flag == vm.wordflags.edit">Edit Word</h3>
+        <h3 ng-if="vm.flag == vm.wordflags.add">New Word</h3>     
+    </div>
+    <div class="row" ng-if="vm.flag == vm.wordflags.list">
+        <div ng-repeat="item in vm.Words | filter:vm.searchText">
+            <div ng-if="$index % 3 == 0" class="clearfix"></div>
+            <div class="col-md-4">
+                <!-- Split button -->
+                <div class="btn-group vocab-word-btn-grp">
+                    <button type="button" ng-class="{vocabmastered: item.mastered}" class="btn btn-default vocab-word" ng-click="vm.showWord(item, $index)">{{item.word}}</button>
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" ng-if="!vm.isCarry">
+                        <li ng-click="vm.addToCarry(item)"><a href="#">Carry</a></li>
+                        <li ng-click="vm.word_edit(item, $index)"><a href="#">Edit</a></li>
+                        <li class="divider"></li>
+                        <li ng-click="vm.word_remove($index)"><a href="#">Remove</a></li>
+                    </ul>
+                    <ul class="dropdown-menu" role="menu" ng-if="vm.isCarry">
+                        <li ng-click="vm.dropCarryWord($index)"><a href="#">Drop Word</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit words -->
+    <form ng-if="vm.flag == vm.wordflags.edit || vm.flag == vm.wordflags.add">
+        <div class="form-group">
+            <label for="word">Word</label>
+            <input type="text" class="form-control" id="word" placeholder="Enter Word" ng-model="vm.editWord.word" required>
+        </div>
+
+        <div class="form-group">
+            <label for="meaning">Meaning</label>
+            <div class="row">
+                <div class="col-md-9">
+                    <input type="text" class="form-control" id="meaning" placeholder="Meaning" ng-model="vm.editWord._meaning">
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-default col-md-3" ng-click="vm.edit_addMeaning(vm.editWord._meaning); vm.editWord._meaning=''">Add</button>
+                </div>
+            </div>
+        </div>
+        <ol>
+            <li ng-repeat-start="mean in vm.editWord.meaning track by $index">{{mean}} <button type="button" class="btn btn-danger btn-xs" ng-click="vm.edit_removeMeaning($index)">X</button></li>
+            <hr ng-repeat-end />
+        </ol>
+
+        <div class="form-group">
+            <label for="sentence">Sentence</label>
+            <textarea class="form-control" rows="3" ng-model="vm.editWord._sentence"></textarea>
+            <button class="btn btn-default" ng-click="vm.edit_addSentence(vm.editWord._sentence); vm.editWord._sentence=''">add</button>
+        </div>
+        <ol>
+            <li ng-repeat-start="sentence in vm.editWord.sentence track by $index">{{sentence}} <button type="button" class="btn btn-danger btn-xs" ng-click="vm.edit_removeSentence($index); vm.editWord._sentence=''">X</button></li>
+            <hr ng-repeat-end />
+        </ol>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-model="vm.editWord.mastered"> <b>MASTERED</b> 
+            </label>
+        </div>
+
+        <div class="btn-group" role="group" aria-label="edit options">
+            <button type="submit" class="btn btn-success" ng-click="vm.edit_save()">Save</button>
+            <button type="button" class="btn btn-danger" ng-click="vm.edit_discard()">Discard</button>
+        </div>
+
+    </form>
+
+    <!-- Word Details -->
+    <div ng-if="vm.flag == vm.wordflags.detail || vm.flag == vm.wordflags.flashcard">
+        <div class="row">
+            <h2>{{vm.selectedWord.word}}</h2>
+        </div>
+        <hr />
+        <div ng-if="vm.flag == vm.wordflags.detail || vm.cardFlip == true">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Meaning</div>
+                <!-- List group -->
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="meaning in vm.selectedWord.meaning track by $index" ng-bind="meaning"></li>
+                </ul>
+            </div>
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Sentences</div>
+                <!-- List group -->
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="sentence in vm.selectedWord.sentence track by $index" ng-bind="sentence"></li>
+                </ul>
+            </div>
+            <div ng-if="vm.selectedWord.mastered">
+                <h4>Mastered</h4>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div ng-if="vm.error.show" class="alert alert-danger" role="alert">
+    <strong>Oh snap!</strong> {{vm.error.message}}
+</div>

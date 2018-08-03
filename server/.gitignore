@@ -1,0 +1,4 @@
+/node_modules/*
+.ntvs_analysis.dat
+VocabTrainerServer.njsproj
+VocabTrainerServer.njsproj.vspscc

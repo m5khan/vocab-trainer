@@ -1,0 +1,6 @@
+c:\users\shoaib\documents\visual studio 2013\Projects\VocabTrainerClient\VocabTrainerClient\bin\VocabTrainerClient.dll.config
+c:\users\shoaib\documents\visual studio 2013\Projects\VocabTrainerClient\VocabTrainerClient\bin\VocabTrainerClient.dll
+c:\users\shoaib\documents\visual studio 2013\Projects\VocabTrainerClient\VocabTrainerClient\bin\VocabTrainerClient.pdb
+c:\users\shoaib\documents\visual studio 2013\Projects\VocabTrainerClient\VocabTrainerClient\obj\Debug\VocabTrainerClient.csprojResolveAssemblyReference.cache
+c:\users\shoaib\documents\visual studio 2013\Projects\VocabTrainerClient\VocabTrainerClient\obj\Debug\VocabTrainerClient.dll
+c:\users\shoaib\documents\visual studio 2013\Projects\VocabTrainerClient\VocabTrainerClient\obj\Debug\VocabTrainerClient.pdb
